@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>योजना सहायक — जानिए आपको कौन सी सरकारी योजना मिल सकती है</title>
+<meta name="description" content="5 आसान सवालों के जवाब दें और जानें कि आप किन सरकारी योजनाओं के हकदार हैं — PM-Kisan, आयुष्मान भारत, पेंशन, छात्रवृत्ति और बहुत कुछ। मुफ्त, बिना लॉगिन।">
+<style>
+  :root{--saffron:#e87722;--green:#1a7f37;--blue:#1c4fa0;--bg:#faf7f2;--card:#ffffff;--text:#26221c;--muted:#6f675c;--border:#e5ddd0;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,'Noto Sans Devanagari',sans-serif;font-size:18px;line-height:1.5;min-height:100vh}
+  .wrap{max-width:640px;margin:0 auto;padding:16px 14px 60px}
+  header{display:flex;align-items:center;gap:10px;padding:6px 0 2px}
+  .logo{font-size:34px}
+  h1{font-size:24px;color:var(--blue)}
+  .sub{color:var(--muted);font-size:15px;margin:2px 0 14px}
+  .langbtn{margin-left:auto;background:var(--card);border:2px solid var(--blue);color:var(--blue);border-radius:24px;padding:7px 16px;font-size:16px;font-weight:700;cursor:pointer}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:18px;box-shadow:0 1px 4px rgba(0,0,0,.05);margin-bottom:14px}
+  .qnum{color:var(--saffron);font-weight:700;font-size:14px;letter-spacing:1px}
+  .qtext{font-size:22px;font-weight:700;margin:6px 0 16px}
+  .opts{display:grid;gap:10px}
+  .opt{display:block;width:100%;text-align:left;background:#fdfbf7;border:2px solid var(--border);border-radius:12px;padding:15px 16px;font-size:19px;cursor:pointer;font-family:inherit;transition:border-color .1s}
+  .opt:active{background:#f3ecdf}
+  .opt.sel{border-color:var(--green);background:#eef7ee;font-weight:700}
+  .opt .em{font-size:22px;margin-right:10px}
+  .progress{height:8px;background:var(--border);border-radius:4px;margin:10px 0 18px;overflow:hidden}
+  .progress div{height:100%;background:linear-gradient(90deg,var(--saffron),var(--green));border-radius:4px;transition:width .3s}
+  .nav{display:flex;gap:10px;margin-top:16px}
+  .btn{flex:1;border:none;border-radius:12px;padding:16px;font-size:20px;font-weight:700;cursor:pointer;font-family:inherit}
+  .btn-main{background:var(--green);color:#fff}
+  .btn-back{background:#efe9de;color:var(--text);flex:0 0 auto;padding:16px 20px}
+  .btn-main:disabled{background:#b8ccb8;cursor:default}
+  .hint{font-size:14px;color:var(--muted);margin-top:8px}
+  /* results */
+  .rescount{font-size:20px;font-weight:700;margin:4px 0 14px}
+  .scheme{border-left:6px solid var(--green)}
+  .scheme h3{font-size:20px;color:var(--blue);margin-bottom:4px}
+  .benefit{display:inline-block;background:#eef7ee;color:var(--green);font-weight:800;font-size:18px;border-radius:8px;padding:4px 12px;margin:6px 0}
+  .scheme p{font-size:16px;margin:6px 0}
+  .how{background:#fff8ef;border:1px solid #f3dfc0;border-radius:10px;padding:10px 12px;font-size:15.5px;margin-top:8px}
+  .how b{color:var(--saffron)}
+  .link{display:inline-block;margin-top:8px;background:var(--blue);color:#fff;text-decoration:none;border-radius:10px;padding:10px 16px;font-size:16px;font-weight:700}
+  .helpline{font-size:15px;color:var(--muted);margin-top:6px}
+  .disclaimer{font-size:13.5px;color:var(--muted);background:#f5f0e6;border-radius:10px;padding:12px;margin-top:16px}
+  .restart{background:none;border:none;color:var(--blue);font-size:17px;font-weight:700;cursor:pointer;text-decoration:underline;margin-top:14px;font-family:inherit}
+  footer{text-align:center;color:var(--muted);font-size:13px;margin-top:30px}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <span class="logo">🇮🇳</span>
+    <div><h1 id="title"></h1></div>
+    <button class="langbtn" id="langbtn" onclick="toggleLang()"></button>
+  </header>
+  <p class="sub" id="subtitle"></p>
+
+  <div id="quiz">
+    <div class="progress"><div id="bar" style="width:0%"></div></div>
+    <div class="card">
+      <div class="qnum" id="qnum"></div>
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="hint" id="qhint"></div>
+      <div class="nav">
+        <button class="btn btn-back" id="backbtn" onclick="back()">←</button>
+        <button class="btn btn-main" id="nextbtn" onclick="next()"></button>
+      </div>
+    </div>
+  </div>
+
+  <div id="results" class="hidden">
+    <div class="rescount" id="rescount"></div>
+    <div id="schemelist"></div>
+    <div class="disclaimer" id="disclaimer"></div>
+    <button class="restart" onclick="restart()" id="restartbtn"></button>
+  </div>
+
+  <footer id="footer"></footer>
+</div>
+
+<script>
+let lang = 'hi';
+const T = {
+  hi:{title:'योजना सहायक',subtitle:'5 आसान सवाल — जानिए आपको कौन सी सरकारी योजनाएँ मिल सकती हैं। मुफ्त, बिना लॉगिन।',lang:'English',next:'आगे →',showres:'योजनाएँ देखें ✓',q:'सवाल',of:'/',resfor:'आपके लिए मिलीं',schemes:'योजनाएँ',get:'क्या मिलेगा:',how:'कैसे मिलेगा:',helpline:'हेल्पलाइन',site:'सरकारी वेबसाइट खोलें',restart:'← फिर से शुरू करें',multi:'(एक से ज़्यादा चुन सकते हैं)',
+  disclaimer:'⚠️ यह जानकारी सिर्फ मार्गदर्शन के लिए है। पात्रता की अंतिम पुष्टि सरकारी वेबसाइट, नज़दीकी CSC (जन सेवा केंद्र), ग्राम पंचायत या बैंक से करें। किसी को भी पैसे देकर फॉर्म न भरवाएँ — सरकारी योजनाओं के आवेदन मुफ्त या बहुत कम शुल्क में होते हैं। सभी योजनाएँ myscheme.gov.in पर देखें।',
+  footer:'यह एक निःशुल्क जनहित सेवा है · आपकी जानकारी कहीं नहीं भेजी जाती (सब कुछ आपके फोन में ही रहता है)'},
+  en:{title:'Yojana Sahayak',subtitle:'5 simple questions — find the government schemes you may be entitled to. Free, no login.',lang:'हिंदी',next:'Next →',showres:'Show my schemes ✓',q:'Question',of:'/',resfor:'Schemes found for you:',schemes:'schemes',get:'What you get:',how:'How to get it:',helpline:'Helpline',site:'Open official website',restart:'← Start again',multi:'(you can pick more than one)',
+  disclaimer:'⚠️ This is guidance only. Confirm final eligibility on the official website, your nearest CSC (Common Service Centre), Gram Panchayat, or bank. Never pay agents large fees — government scheme applications are free or very low cost. Browse all schemes on myscheme.gov.in.',
+  footer:'A free public-interest service · your answers never leave your phone'}
+};
+
+const QS = [
+ {id:'age',hi:'आपकी उम्र कितनी है?',en:'How old are you?',opts:[
+   {v:'u18',hi:'18 से कम',en:'Under 18',em:'🧒'},
+   {v:'18_40',hi:'18 – 40 साल',en:'18 – 40 years',em:'🧑'},
+   {v:'41_59',hi:'41 – 59 साल',en:'41 – 59 years',em:'🧔'},
+   {v:'60p',hi:'60 साल या ज़्यादा',en:'60 or above',em:'👴'}]},
+ {id:'gender',hi:'आप…',en:'You are…',opts:[
+   {v:'m',hi:'पुरुष',en:'Man',em:'👨'},
+   {v:'f',hi:'महिला',en:'Woman',em:'👩'},
+   {v:'o',hi:'अन्य',en:'Other',em:'🧑'}]},
+ {id:'work',hi:'आप क्या काम करते हैं?',en:'What work do you do?',opts:[
+   {v:'farmer',hi:'खेती (अपनी ज़मीन है)',en:'Farming (own land)',em:'🌾'},
+   {v:'vendor',hi:'रेहड़ी-पटरी / ठेला / दुकान लगाना',en:'Street vending / stall',em:'🛒'},
+   {v:'labour',hi:'मज़दूरी / दिहाड़ी / घरेलू काम',en:'Daily wage / domestic work',em:'👷'},
+   {v:'artisan',hi:'कारीगरी (दर्जी, बढ़ई, लोहार, मोची…)',en:'Artisan (tailor, carpenter, cobbler…)',em:'🔨'},
+   {v:'business',hi:'छोटा व्यापार / दुकान / ऑनलाइन बेचना',en:'Small business / shop / online selling',em:'🏪'},
+   {v:'student',hi:'पढ़ाई करते हैं',en:'Student',em:'📚'},
+   {v:'home',hi:'घर संभालते हैं / काम नहीं करते',en:'Homemaker / not working',em:'🏠'}]},
+ {id:'tax',hi:'क्या आपके घर में कोई इनकम टैक्स भरता है या सरकारी नौकरी में है?',en:'Does anyone in your family pay income tax or hold a government job?',opts:[
+   {v:'no',hi:'नहीं',en:'No',em:'❌'},
+   {v:'yes',hi:'हाँ',en:'Yes',em:'✅'}]},
+ {id:'house',hi:'आपके घर-परिवार में… ',en:'In your household…',multi:true,opts:[
+   {v:'ration',hi:'राशन कार्ड है',en:'We have a ration card',em:'📋'},
+   {v:'girl',hi:'10 साल से छोटी बेटी है',en:'A daughter under 10',em:'👧'},
+   {v:'mother',hi:'गर्भवती महिला / छोटा बच्चा है',en:'Pregnant woman / infant',em:'🤱'},
+   {v:'studentkid',hi:'स्कूल-कॉलेज में पढ़ने वाले बच्चे हैं',en:'Children in school/college',em:'🎒'},
+   {v:'kaccha',hi:'कच्चा घर है / अपना घर नहीं है',en:'Kaccha house / no own house',em:'🛖'},
+   {v:'nogas',hi:'गैस (LPG) कनेक्शन नहीं है',en:'No LPG gas connection',em:'🔥'},
+   {v:'none',hi:'इनमें से कोई नहीं',en:'None of these',em:'➖'}]}
+];
+
+// p = {age, gender, work, tax, house:[...]}
+const SCHEMES = [
+ {m:p=>p.work==='farmer'&&p.tax==='no',
+  hi:{n:'पीएम किसान सम्मान निधि',b:'₹6,000 हर साल सीधे बैंक खाते में',d:'ज़मीन वाले सभी किसान परिवारों को साल में 3 किस्तों में ₹2,000-₹2,000 मिलते हैं।',h:'आधार, बैंक खाता और ज़मीन के कागज़ लेकर नज़दीकी CSC जाएँ, या वेबसाइट पर "New Farmer Registration" करें। eKYC ज़रूरी है।'},
+  en:{n:'PM Kisan Samman Nidhi',b:'₹6,000 every year in your bank account',d:'All landholding farmer families get ₹2,000 three times a year.',h:'Take Aadhaar, bank passbook and land papers to your nearest CSC, or use "New Farmer Registration" on the website. eKYC is mandatory.'},
+  url:'https://pmkisan.gov.in',tel:'155261'},
+ {m:p=>p.work==='farmer',
+  hi:{n:'किसान क्रेडिट कार्ड (KCC)',b:'सस्ता फसल लोन — सिर्फ ~4% ब्याज पर',d:'खेती के लिए बैंक से सस्ता कर्ज़। समय पर चुकाने पर ब्याज में छूट। साहूकार से कर्ज़ लेने से बचें।',h:'अपने बैंक (जहाँ खाता है) में जाकर KCC फॉर्म भरें। ज़मीन के कागज़ और आधार ले जाएँ।'},
+  en:{n:'Kisan Credit Card (KCC)',b:'Cheap crop loan at ~4% interest',d:'Low-cost farm credit from banks — far safer than moneylenders. Interest rebate on timely repayment.',h:'Visit your bank branch with land papers and Aadhaar and ask for the KCC form.'},
+  url:'https://www.myscheme.gov.in/schemes/kcc',tel:'1800-115-526'},
+ {m:p=>p.tax==='no',
+  hi:{n:'आयुष्मान भारत (PM-JAY)',b:'₹5 लाख तक का मुफ्त इलाज हर साल',d:'गरीब परिवारों को सरकारी और बड़े प्राइवेट अस्पतालों में मुफ्त भर्ती-इलाज। 70+ उम्र के सभी बुज़ुर्ग भी पात्र हैं (चाहे आय कुछ भी हो)।',h:'वेबसाइट/ऐप पर मोबाइल नंबर से देखें कि आपका नाम लिस्ट में है या नहीं। कार्ड नज़दीकी CSC या सरकारी अस्पताल में मुफ्त बनता है।'},
+  en:{n:'Ayushman Bharat (PM-JAY)',b:'Free hospital treatment up to ₹5 lakh/year',d:'Free admission and treatment for poor families at government and empanelled private hospitals. All seniors 70+ are eligible regardless of income.',h:'Check your name with your mobile number on the website/app. The card is made free at any CSC or government hospital.'},
+  url:'https://beneficiary.nha.gov.in',tel:'14555'},
+ {m:p=>p.work==='vendor',
+  hi:{n:'पीएम स्वनिधि',b:'बिना गारंटी ₹10,000 से ₹50,000 तक का लोन',d:'रेहड़ी-पटरी और ठेले वालों के लिए। पहला लोन ₹10,000, समय पर चुकाने पर ₹20,000 फिर ₹50,000। डिजिटल पेमेंट पर कैशबैक भी।',h:'नगर पालिका / नगर निगम के ऑफिस या CSC में आवेदन करें। वेंडिंग सर्टिफिकेट या पहचान पत्र ले जाएँ।'},
+  en:{n:'PM SVANidhi',b:'Collateral-free loan ₹10,000 to ₹50,000',d:'For street vendors. First loan ₹10,000; repay on time to get ₹20,000, then ₹50,000. Cashback on digital payments too.',h:'Apply at your municipal office or CSC with your vending certificate or ID.'},
+  url:'https://pmsvanidhi.mohua.gov.in',tel:'1800-111-979'},
+ {m:p=>p.work==='artisan',
+  hi:{n:'पीएम विश्वकर्मा योजना',b:'₹15,000 औज़ार + ₹500/दिन ट्रेनिंग भत्ता + ₹3 लाख तक सस्ता लोन',d:'दर्जी, बढ़ई, लोहार, कुम्हार, मोची, राजमिस्त्री जैसे 18 पारंपरिक कामों के लिए। ट्रेनिंग के दौरान रोज़ ₹500, औज़ार के लिए ₹15,000, और सिर्फ 5% ब्याज पर लोन।',h:'नज़दीकी CSC पर आधार और बैंक पासबुक लेकर रजिस्ट्रेशन कराएँ।'},
+  en:{n:'PM Vishwakarma',b:'₹15,000 for tools + ₹500/day training stipend + loans up to ₹3 lakh',d:'For 18 traditional trades — tailor, carpenter, blacksmith, potter, cobbler, mason etc. Loans at just 5% interest.',h:'Register at your nearest CSC with Aadhaar and bank passbook.'},
+  url:'https://pmvishwakarma.gov.in',tel:'18002677777'},
+ {m:p=>['vendor','business','artisan'].includes(p.work),
+  hi:{n:'मुद्रा लोन (PMMY)',b:'बिना गारंटी ₹10 लाख तक का बिज़नेस लोन',d:'दुकान, ठेला, सिलाई, ब्यूटी पार्लर, ऑनलाइन बिक्री — कोई भी छोटा धंधा शुरू करने या बढ़ाने के लिए बैंक से बिना गारंटी लोन।',h:'किसी भी बैंक में जाकर मुद्रा लोन माँगें — शिशु (₹50 हज़ार तक), किशोर (₹5 लाख तक), तरुण (₹10 लाख तक)। कोई एजेंट फीस नहीं लगती।'},
+  en:{n:'MUDRA Loan (PMMY)',b:'Business loan up to ₹10 lakh, no collateral',d:'For any small business — shop, cart, tailoring, beauty parlour, online selling. No guarantee needed.',h:'Ask any bank for a MUDRA loan — Shishu (up to ₹50k), Kishor (up to ₹5L), Tarun (up to ₹10L). No agent fee.'},
+  url:'https://www.mudra.org.in',tel:'1800-180-1111'},
+ {m:p=>['labour','vendor','artisan','home'].includes(p.work)&&!['u18','60p'].includes(p.age),
+  hi:{n:'ई-श्रम कार्ड',b:'₹2 लाख का मुफ्त दुर्घटना बीमा + सरकारी योजनाओं से सीधा जुड़ाव',d:'मज़दूरों, घरेलू कामगारों, रेहड़ी वालों के लिए राष्ट्रीय पहचान। कई राज्य ई-श्रम वालों को भत्ते भी देते हैं।',h:'eshram.gov.in पर खुद रजिस्टर करें (मुफ्त) या CSC जाएँ। सिर्फ आधार और बैंक खाता चाहिए।'},
+  en:{n:'e-Shram Card',b:'Free ₹2 lakh accident insurance + direct link to welfare schemes',d:'National registry for unorganised workers — labourers, domestic workers, vendors. Many states give extra benefits to e-Shram holders.',h:'Register free on eshram.gov.in or at a CSC. Only Aadhaar and a bank account needed.'},
+  url:'https://eshram.gov.in',tel:'14434'},
+ {m:p=>p.age==='18_40'&&p.tax==='no',
+  hi:{n:'अटल पेंशन योजना',b:'60 के बाद ₹1,000–₹5,000 महीना पक्की पेंशन',d:'18–40 उम्र के लोगों के लिए। अभी थोड़ा-थोड़ा जमा करें (जैसे ₹42/माह से शुरू), 60 के बाद जीवन भर पेंशन।',h:'अपने बैंक या पोस्ट ऑफिस में जाकर APY फॉर्म भरें। खाते से अपने-आप पैसा कटता रहेगा।'},
+  en:{n:'Atal Pension Yojana',b:'Guaranteed ₹1,000–₹5,000/month pension after 60',d:'For ages 18–40. Contribute small amounts now (from ~₹42/month) and get lifelong pension after 60.',h:'Fill the APY form at your bank or post office. Contributions auto-debit from your account.'},
+  url:'https://www.npscra.nsdl.co.in/scheme-details.php',tel:'1800-889-1030'},
+ {m:p=>['18_40','41_59'].includes(p.age),
+  hi:{n:'सुरक्षा बीमा (PMSBY + PMJJBY)',b:'₹4 लाख तक का बीमा सिर्फ ~₹456 साल में',d:'PMSBY: ₹20/साल में ₹2 लाख का दुर्घटना बीमा (18–70 उम्र)। PMJJBY: ₹436/साल में ₹2 लाख का जीवन बीमा (18–50 उम्र)। परिवार की सुरक्षा के लिए सबसे सस्ता तरीका।',h:'अपने बैंक में जाकर दोनों फॉर्म भरें — खाते से अपने-आप प्रीमियम कटेगा।'},
+  en:{n:'PMSBY + PMJJBY Insurance',b:'Up to ₹4 lakh cover for just ~₹456/year',d:'PMSBY: ₹2 lakh accident cover for ₹20/yr (age 18–70). PMJJBY: ₹2 lakh life cover for ₹436/yr (age 18–50). The cheapest protection for your family.',h:'Fill both forms at your bank — premium auto-debits from your account.'},
+  url:'https://www.jansuraksha.gov.in',tel:'1800-180-1111'},
+ {m:p=>p.house.includes('ration'),
+  hi:{n:'मुफ्त राशन (PMGKAY)',b:'हर महीने मुफ्त अनाज (चावल/गेहूँ)',d:'राशन कार्ड धारकों को हर महीने प्रति व्यक्ति मुफ्त अनाज। "One Nation One Ration" से देश में कहीं भी राशन ले सकते हैं।',h:'अपने राशन डीलर (उचित मूल्य दुकान) से हर महीने लें। नाम जुड़वाने/शिकायत के लिए हेल्पलाइन 1967 पर कॉल करें।'},
+  en:{n:'Free Ration (PMGKAY)',b:'Free foodgrains every month',d:'Ration card holders get free grain per person monthly. With One Nation One Ration you can collect anywhere in India.',h:'Collect from your Fair Price Shop monthly. Call 1967 for complaints or to add family members.'},
+  url:'https://nfsa.gov.in',tel:'1967'},
+ {m:p=>p.house.includes('kaccha')&&p.tax==='no',
+  hi:{n:'पीएम आवास योजना',b:'पक्का घर बनाने के लिए ₹1.2 लाख+ की मदद',d:'कच्चे घर या बेघर परिवारों को पक्का घर बनाने के लिए सीधी आर्थिक मदद (पहाड़ी इलाकों में ₹1.3 लाख)। शौचालय, बिजली, गैस भी साथ में।',h:'गाँव में: ग्राम पंचायत / आवास सहायक से मिलें। शहर में: नगर पालिका में आवेदन करें। सर्वे लिस्ट में नाम ज़रूरी है।'},
+  en:{n:'PM Awas Yojana',b:'₹1.2 lakh+ assistance to build a pucca house',d:'Direct help for families in kaccha houses to build a permanent home (₹1.3L in hill areas), along with toilet, power and gas.',h:'Rural: meet your Gram Panchayat / Awaas Sahayak. Urban: apply at the municipal office. Your name must be in the survey list.'},
+  url:'https://pmayg.nic.in',tel:'1800-11-6446'},
+ {m:p=>p.house.includes('nogas')&&p.gender==='f'&&p.tax==='no',
+  hi:{n:'उज्ज्वला योजना',b:'मुफ्त गैस (LPG) कनेक्शन + पहला सिलेंडर-चूल्हा',d:'गरीब परिवार की महिलाओं को मुफ्त LPG कनेक्शन। धुएँ से आज़ादी, सेहत की रक्षा। सिलेंडर पर सब्सिडी भी।',h:'नज़दीकी गैस एजेंसी (Indane/HP/Bharat) में आधार, राशन कार्ड और बैंक पासबुक लेकर जाएँ।'},
+  en:{n:'Ujjwala Yojana',b:'Free LPG connection + first cylinder & stove',d:'Free LPG connection for women of poor households, with subsidy on refills. Freedom from smoke.',h:'Visit your nearest gas agency (Indane/HP/Bharat) with Aadhaar, ration card and bank passbook.'},
+  url:'https://www.pmuy.gov.in',tel:'1800-266-6696'},
+ {m:p=>p.house.includes('girl'),
+  hi:{n:'सुकन्या समृद्धि योजना',b:'बेटी के लिए सबसे ज़्यादा ब्याज वाली सरकारी बचत',d:'10 साल से छोटी बेटी के नाम खाता खोलें — ₹250 से शुरू। बैंक FD से ज़्यादा ब्याज, पूरी तरह टैक्स-फ्री। पढ़ाई और शादी के लिए बड़ी रकम तैयार होती है।',h:'नज़दीकी पोस्ट ऑफिस या बैंक में बेटी का जन्म प्रमाणपत्र और आधार लेकर खाता खोलें।'},
+  en:{n:'Sukanya Samriddhi Yojana',b:'Highest-interest government savings for your daughter',d:'Open an account for a daughter under 10 — start with ₹250. Higher interest than bank FDs, fully tax-free.',h:'Open at any post office or bank with her birth certificate and Aadhaar.'},
+  url:'https://www.indiapost.gov.in/Financial/pages/content/post-office-saving-schemes.aspx',tel:'1800-266-6868'},
+ {m:p=>p.house.includes('mother'),
+  hi:{n:'मातृ वंदना योजना (PMMVY)',b:'पहले बच्चे पर ₹5,000 (बेटी होने पर दूसरे पर ₹6,000)',d:'गर्भवती और स्तनपान कराने वाली माताओं को पोषण के लिए सीधे बैंक में पैसा। साथ में आँगनवाड़ी से मुफ्त पोषाहार और जननी सुरक्षा योजना के तहत अस्पताल में मुफ्त प्रसव + ₹1,400 तक।',h:'नज़दीकी आँगनवाड़ी केंद्र या ASHA दीदी से मिलें — वही रजिस्ट्रेशन करा देंगी।'},
+  en:{n:'Matru Vandana Yojana (PMMVY)',b:'₹5,000 for first child (₹6,000 for a second girl child)',d:'Cash support for pregnant and nursing mothers, plus free anganwadi nutrition and free hospital delivery (JSY, up to ₹1,400 extra).',h:'Meet your nearest Anganwadi worker or ASHA — they will register you.'},
+  url:'https://pmmvy.wcd.gov.in',tel:'104'},
+ {m:p=>p.house.includes('studentkid')||p.work==='student',
+  hi:{n:'राष्ट्रीय छात्रवृत्ति पोर्टल (NSP)',b:'पढ़ाई के लिए हज़ारों रुपये की छात्रवृत्तियाँ',d:'SC/ST/OBC/अल्पसंख्यक/कम आय वाले परिवारों के बच्चों के लिए स्कूल से कॉलेज तक कई छात्रवृत्तियाँ — एक ही पोर्टल पर।',h:'scholarships.gov.in पर बच्चे का रजिस्ट्रेशन करें। स्कूल/कॉलेज का ID, आय प्रमाणपत्र और बैंक खाता चाहिए। आवेदन मुफ्त है।'},
+  en:{n:'National Scholarship Portal (NSP)',b:'Scholarships worth thousands for studies',d:'Many scholarships for SC/ST/OBC/minority/low-income students, school to college, on one portal.',h:'Register on scholarships.gov.in with school/college ID, income certificate and a bank account. Applying is free.'},
+  url:'https://scholarships.gov.in',tel:'0120-6619540'},
+ {m:p=>p.age==='60p'&&p.tax==='no',
+  hi:{n:'वृद्धावस्था पेंशन (NSAP)',b:'हर महीने पेंशन सीधे खाते में',d:'गरीब (BPL) बुज़ुर्गों को केंद्र + राज्य मिलाकर मासिक पेंशन (राज्य के हिसाब से ₹1,000 या ज़्यादा तक)। विधवा और दिव्यांग पेंशन भी उपलब्ध।',h:'ग्राम पंचायत / ब्लॉक ऑफिस / नगर पालिका में आवेदन करें, या अपने राज्य के पेंशन पोर्टल पर। आधार, उम्र प्रमाण और बैंक खाता चाहिए।'},
+  en:{n:'Old Age Pension (NSAP)',b:'Monthly pension straight to your account',d:'Monthly pension for BPL seniors (centre + state top-up, often ₹1,000+ depending on state). Widow and disability pensions also available.',h:'Apply at your Gram Panchayat / block office / municipality or your state pension portal, with Aadhaar, age proof and bank account.'},
+  url:'https://nsap.nic.in',tel:'1800-111-555'},
+ {m:p=>true,
+  hi:{n:'जन धन खाता',b:'मुफ्त बैंक खाता — ज़ीरो बैलेंस + ₹2 लाख दुर्घटना बीमा',d:'हर सरकारी योजना का पैसा सीधे खाते में आता है, इसलिए खाता सबसे ज़रूरी है। RuPay कार्ड के साथ ₹2 लाख का मुफ्त दुर्घटना बीमा।',h:'किसी भी बैंक में सिर्फ आधार लेकर जाएँ — मिनटों में खाता खुलता है, कोई पैसा नहीं लगता।'},
+  en:{n:'Jan Dhan Account',b:'Free zero-balance bank account + ₹2 lakh accident cover',d:'Every scheme pays directly into a bank account, so this is step one. Free RuPay card includes ₹2 lakh accident insurance.',h:'Walk into any bank with just your Aadhaar — the account opens in minutes, free of cost.'},
+  url:'https://pmjdy.gov.in',tel:'1800-11-0001'}
+];
+
+let step=0; const ans={house:[]};
+
+function t(){return T[lang]}
+function toggleLang(){lang=lang==='hi'?'en':'hi';renderChrome();showStep()}
+function renderChrome(){
+  document.getElementById('title').textContent=t().title;
+  document.getElementById('subtitle').textContent=t().subtitle;
+  document.getElementById('langbtn').textContent=t().lang;
+  document.getElementById('footer').textContent=t().footer;
+  document.documentElement.lang=lang;
+}
+function showStep(){
+  if(step>=QS.length){showResults();return}
+  document.getElementById('quiz').classList.remove('hidden');
+  document.getElementById('results').classList.add('hidden');
+  const q=QS[step];
+  document.getElementById('bar').style.width=(step/QS.length*100)+'%';
+  document.getElementById('qnum').textContent=t().q+' '+(step+1)+' '+t().of+' '+QS.length;
+  document.getElementById('qtext').textContent=q[lang];
+  document.getElementById('qhint').textContent=q.multi?t().multi:'';
+  document.getElementById('backbtn').style.visibility=step===0?'hidden':'visible';
+  const nb=document.getElementById('nextbtn');
+  nb.textContent=step===QS.length-1?t().showres:t().next;
+  const box=document.getElementById('opts');box.innerHTML='';
+  q.opts.forEach(o=>{
+    const b=document.createElement('button');b.className='opt';
+    b.innerHTML='<span class="em">'+o.em+'</span>'+o[lang];
+    const sel=q.multi?ans.house.includes(o.v):ans[q.id]===o.v;
+    if(sel)b.classList.add('sel');
+    b.onclick=()=>{
+      if(q.multi){
+        if(o.v==='none'){ans.house=['none']}
+        else{ans.house=ans.house.filter(x=>x!=='none');
+          ans.house.includes(o.v)?ans.house=ans.house.filter(x=>x!==o.v):ans.house.push(o.v)}
+      }else{ans[q.id]=o.v;setTimeout(next,200)}
+      showStep();
+    };
+    box.appendChild(b);
+  });
+  nb.disabled=q.multi?ans.house.length===0:!ans[q.id];
+}
+function next(){
+  const q=QS[step];
+  if(q.multi?ans.house.length===0:!ans[q.id])return;
+  step++;showStep();
+}
+function back(){if(step>0){step--;showStep()}}
+function restart(){step=0;ans.age=ans.gender=ans.work=ans.tax=undefined;ans.house=[];showStep()}
+
+function showResults(){
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('results').classList.remove('hidden');
+  document.getElementById('bar').style.width='100%';
+  const matched=SCHEMES.filter(s=>{try{return s.m(ans)}catch(e){return false}});
+  document.getElementById('rescount').textContent='✅ '+t().resfor+' '+matched.length+' '+t().schemes;
+  document.getElementById('schemelist').innerHTML=matched.map(s=>{
+    const L=s[lang];
+    return `<div class="card scheme">
+      <h3>${L.n}</h3>
+      <div class="benefit">💰 ${L.b}</div>
+      <p>${L.d}</p>
+      <div class="how"><b>📍 ${t().how}</b> ${L.h}</div>
+      <a class="link" href="${s.url}" target="_blank" rel="noopener">🔗 ${t().site}</a>
+      <div class="helpline">📞 ${t().helpline}: <b>${s.tel}</b></div>
+    </div>`;
+  }).join('');
+  document.getElementById('disclaimer').textContent=t().disclaimer;
+  document.getElementById('restartbtn').textContent=t().restart;
+  window.scrollTo(0,0);
+}
+renderChrome();showStep();
+</script>
+</body>
+</html>
